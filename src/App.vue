@@ -7,6 +7,12 @@
     </template>
   </v-toolbar>
   <v-content>
+    <v-alert
+    :value="hasError"
+    type="error"
+    >
+      No camera found
+    </v-alert>
     <div v-if="isScanning">
       <scanner 
         @codeDetected="handleDetectedCode">
@@ -19,14 +25,30 @@
           @closeProductInfo="handleClosing"
         ></product>
       </template>
-      <template v-else class="entryPoint">
-        <div class="text-xs-center">
-          <v-btn @click="checkForCamera" color="info">Scan</v-btn>
-        </div>
-        <p class="text-md-center">Get information about your food / drink by simply clicking on 'SCAN', 
-          scan your barcode and voilá!
-        </p>
-      </template>
+      <div v-else >
+
+        <v-jumbotron>
+          <v-container fill-height>
+            <v-layout align-center>
+              <v-flex>
+                <h3 class="display-2">Track your Food & Drinks</h3>
+                <span class="subheading">
+                  Check out the repository on <a href="https://github.com/devilsdev/barcodefoodinfo">GitHub</a>
+                </span>
+                <v-divider class="my-3"></v-divider>
+                <div class="title mb-3">
+                  With BarcodeFoodInfo you can get information about any* food/drink that has a barcode on it.<br/><br/>
+                  1. Start by clicking on the 'SCAN' Button <br/>
+                  2. Scan your Barcode <br/>
+                  3. The App shows you information about the scanned product
+                </div>
+                <v-btn @click="checkForCamera" color="info">Scan</v-btn>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-jumbotron>
+
+      </div>
     </div> 
   </v-content>
   <v-footer app fixed>
@@ -46,7 +68,8 @@ export default {
       currentCode: 'No Barcode',
       product: {},
       isScanning: false,
-      productFound: false
+      productFound: false,
+      hasError: false
     }
   },
   components: {
@@ -56,7 +79,10 @@ export default {
   methods: {
     checkForCamera () {
       let errorMessage = 'Your device does not support this application (No Camera found)'
-      navigator.getUserMedia({video: true}, () => this.isScanning = true, () => alert(errorMessage))
+      navigator.getUserMedia({video: true}, 
+        () => this.isScanning = true, 
+        () => this.showProductError()
+      )
     },
     handleDetectedCode (code) {
       this.currentCode = code
@@ -71,7 +97,7 @@ export default {
           console.log(response)
           if(response.data.status === 0) {
             // product does not exist
-            alert('No product found')
+            this.showProductError()
             return
           }
           // product found
@@ -93,6 +119,12 @@ export default {
     handleClosing() {
       this.productFound = false
       this.product = {}
+    },
+    showProductError() {
+      this.hasError = true
+      setTimeout(() => {
+        this.hasError = false
+      }, 3000)
     }
   }
 }
@@ -117,6 +149,7 @@ body {
 }
 
 .entryPoint{
-  margin-top: 30vh;
+  margin-top: 35vh;
 }
+
 </style>
