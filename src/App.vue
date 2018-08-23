@@ -2,7 +2,7 @@
 <v-app id="inspire" light>
   <v-toolbar app fixed clipped-left>
     <v-toolbar-title>BarcodeFoodInfo</v-toolbar-title>
-    <template v-if="isScanning && hasError">
+    <template v-if="isScanning">
       <v-btn color="error" @click="isScanning = !isScanning">Stop Scanning</v-btn>
     </template>
   </v-toolbar>
@@ -12,6 +12,12 @@
     type="error"
     >
       No camera found
+    </v-alert>
+    <v-alert
+    :value="productNotFound"
+    type="error"
+    >
+      No product found
     </v-alert>
     <div v-if="isScanning">
       <scanner 
@@ -69,7 +75,8 @@ export default {
       product: {},
       isScanning: false,
       productFound: false,
-      hasError: false
+      hasError: false,
+      productNotFound: false
     }
   },
   components: {
@@ -121,9 +128,9 @@ export default {
       this.product = {}
     },
     showProductError() {
-      this.hasError = true
+      this.productNotFound = true
       setTimeout(() => {
-        this.hasError = false
+        this.productNotFound = false
       }, 3000)
     }
   }
