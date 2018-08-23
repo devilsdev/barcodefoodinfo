@@ -14,7 +14,7 @@
 
         
         <v-list>
-          <v-divider><v-divider>
+          <v-divider></v-divider>
           <li 
             v-for="nutriment in product.nutriments"
             :key="nutriment"
