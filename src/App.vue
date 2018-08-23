@@ -2,7 +2,7 @@
 <v-app id="inspire" light>
   <v-toolbar app fixed clipped-left>
     <v-toolbar-title>BarcodeFoodInfo</v-toolbar-title>
-    <template v-if="isScanning">
+    <template v-if="isScanning && hasError">
       <v-btn color="error" @click="isScanning = !isScanning">Stop Scanning</v-btn>
     </template>
   </v-toolbar>
@@ -78,9 +78,9 @@ export default {
   },
   methods: {
     checkForCamera () {
-      let errorMessage = 'Your device does not support this application (No Camera found)'
       navigator.getUserMedia({video: true}, 
         () => this.isScanning = true, 
+        // if no permission to the camera
         () => this.showProductError()
       )
     },
