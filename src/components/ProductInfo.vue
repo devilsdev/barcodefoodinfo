@@ -10,11 +10,7 @@
         v-for="nutriment in product.nutriments"
         :key="nutriment"
       >
-        <template 
-          v-for="key in Object.keys(product.nutriments)"
-        >
-        {{ key }} {{ nutriment }}
-        </template>
+        {{ nutriment }}
       </li>
     </ul>
   </div>
