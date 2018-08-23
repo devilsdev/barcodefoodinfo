@@ -12,13 +12,7 @@
             <v-btn flat color="warning" @click="close">Close</v-btn>
         </v-card-actions>
 
-        
-
-        <v-list>
-          <v-divider></v-divider>
-          
-
-
+        <ul>
           <li 
             v-for="nutriment in product.nutriments"
             :key="nutriment"
@@ -29,8 +23,7 @@
             {{ key }} {{ nutriment }}
             </template>
           </li>
-        </v-list>
-
+        </ul>
 
     </v-card>
   </div>
