@@ -1,31 +1,22 @@
 <template>
   <div id="productInfo">
-    <v-card>
-        <v-card-title primary-title>
-        <div>
-            <h3 class="headline mb-0">{{ product.product.product_name }}</h3>
-            <p>Barcode: {{product.code}}</p>
-        </div>
-        </v-card-title>
+    <h3 class="headline mb-0">{{ product.product.product_name }}</h3>
+    <p>Barcode: {{product.code}}</p>
 
-        <v-card-actions>
-            <v-btn flat color="warning" @click="close">Close</v-btn>
-        </v-card-actions>
-
-        <ul>
-          <li 
-            v-for="nutriment in product.nutriments"
-            :key="nutriment"
-          >
-            <template 
-              v-for="key in Object.keys(product.nutriments)"
-            >
-            {{ key }} {{ nutriment }}
-            </template>
-          </li>
-        </ul>
-
-    </v-card>
+    <v-btn flat color="warning" @click="close">Close</v-btn>
+    <h4 class="headline mb-0">nutriments</h4>
+    <ul>
+      <li 
+        v-for="nutriment in product.nutriments"
+        :key="nutriment"
+      >
+        <template 
+          v-for="key in Object.keys(product.nutriments)"
+        >
+        {{ key }} {{ nutriment }}
+        </template>
+      </li>
+    </ul>
   </div>
 </template>
 
