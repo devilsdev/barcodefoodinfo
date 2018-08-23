@@ -13,12 +13,22 @@
         </v-card-actions>
 
         
+
         <v-list>
           <v-divider></v-divider>
+          
+
+
           <li 
             v-for="nutriment in product.nutriments"
             :key="nutriment"
-          ></li>
+          >
+            <template 
+              v-for="key in Object.keys(product.nutriments)"
+            >
+            {{ key }} {{ nutriment }}
+            </template>
+          </li>
         </v-list>
 
 
