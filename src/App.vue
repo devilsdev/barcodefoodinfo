@@ -1,13 +1,19 @@
 <template>
 <v-app id="inspire" light>
   <v-toolbar app fixed clipped-left>
-    <v-toolbar-title @click="changeToDebugMode()">BarcodeFoodInfo</v-toolbar-title>
+    <v-toolbar-title @dblclick="changeToDebugMode()">BarcodeFoodInfo</v-toolbar-title>
     <template v-if="debugMode">
-      <input 
-        v-on:keyup.enter="handleDetectedCode(alterNativeInput)" 
-        v-model="alterNativeInput"
-        placeholder="Enter Barcode here"
-      />
+      <v-toolbar-title >(developer mode) </v-toolbar-title>
+      <v-flex xs12 sm6 md3>
+        <v-text-field
+          label="Barcode"
+          placeholder="Type your Barcode here"
+          box
+          v-on:keyup.enter="handleDetectedCode(alterNativeInput)" 
+          v-model="alterNativeInput"
+          style="margin-left: 5vw;"
+        ></v-text-field>
+      </v-flex>
     </template>
 
     <template v-if="isScanning">
@@ -20,6 +26,18 @@
     type="error"
     >
       No camera found
+    </v-alert>
+    <v-alert
+    :value="debugActivated"
+    type="success"
+    >
+      Debug Mode activated
+    </v-alert>
+    <v-alert
+    :value="debugDeactivated"
+    type="error"
+    >
+      Debug Mode deactivated
     </v-alert>
     <v-alert
     :value="productNotFound"
@@ -86,7 +104,9 @@ export default {
       hasError: false,
       productNotFound: false,
       debugMode: false,
-      alterNativeInput: ''
+      alterNativeInput: '',
+      debugActivated: false,
+      debugDeactivated: false
     }
   },
   components: {
@@ -98,7 +118,7 @@ export default {
       navigator.getUserMedia({video: true}, 
         () => this.isScanning = true, 
         // if no permission to the camera
-        () => this.showProductError()
+        () => this.showCameraError()
       )
     },
     handleDetectedCode (code) {
@@ -145,9 +165,22 @@ export default {
         this.productNotFound = false
       }, 3000)
     },
+    showCameraError() {
+      this.hasError = true
+      setTimeout(() => {
+        this.hasError = false
+      }, 3000)
+    },
     changeToDebugMode() {
-      this.debugMode = !this.debugMode
-      alert('DEBUG MODE = ' + this.debugMode)
+      if(this.debugMode) {
+        this.debugMode = false
+        this.debugDeactivated = true
+        setTimeout(() => this.debugDeactivated = false, 3000)
+      } else {
+        this.debugMode = true
+        this.debugActivated = true
+        setTimeout(() => this.debugActivated = false, 3000)
+      }
     }
   }
 }
