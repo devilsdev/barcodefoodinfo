@@ -1,7 +1,15 @@
 <template>
 <v-app id="inspire" light>
   <v-toolbar app fixed clipped-left>
-    <v-toolbar-title>BarcodeFoodInfo</v-toolbar-title>
+    <v-toolbar-title @click="changeToDebugMode()">BarcodeFoodInfo</v-toolbar-title>
+    <template v-if="debugMode">
+      <input 
+        v-on:keyup.enter="handleDetectedCode(alterNativeInput)" 
+        v-model="alterNativeInput"
+        placeholder="Enter Barcode here"
+      />
+    </template>
+
     <template v-if="isScanning">
       <v-btn color="error" @click="isScanning = !isScanning">Stop Scanning</v-btn>
     </template>
@@ -76,7 +84,9 @@ export default {
       isScanning: false,
       productFound: false,
       hasError: false,
-      productNotFound: false
+      productNotFound: false,
+      debugMode: false,
+      alterNativeInput: ''
     }
   },
   components: {
@@ -121,6 +131,8 @@ export default {
     foundProduct(response) {
       this.isScanning = false
       this.product = response.data
+      if(this.debugMode)
+        console.log(response.data)
       this.productFound = true
     },
     handleClosing() {
@@ -132,6 +144,10 @@ export default {
       setTimeout(() => {
         this.productNotFound = false
       }, 3000)
+    },
+    changeToDebugMode() {
+      this.debugMode = !this.debugMode
+      alert('DEBUG MODE = ' + this.debugMode)
     }
   }
 }

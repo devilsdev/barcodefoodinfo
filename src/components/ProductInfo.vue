@@ -1,18 +1,19 @@
 <template>
   <div id="productInfo">
     <h3 class="headline mb-0">{{ product.product.product_name }}</h3>
-    <p>Barcode: {{product.code}}</p>
+    <p>Barcode: {{product.code}}     <v-btn flat color="error" @click="close">Close</v-btn></p>
 
-    <v-btn flat color="warning" @click="close">Close</v-btn>
-    <h4 class="headline mb-0">nutriments</h4>
-    <ul>
-      <li 
-        v-for="nutriment in product.nutriments"
-        :key="nutriment"
+    <h4 class="headline mb-0">Ingredients</h4>
+    <v-list>
+      <v-list-tile
+        v-for="ingredient in product.product.ingredients"
+        :key="ingredient.id"
       >
-        {{ nutriment }}
-      </li>
-    </ul>
+        {{ ingredient.text }}
+      </v-list-tile>
+    </v-list>
+    
+
   </div>
 </template>
 
