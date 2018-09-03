@@ -15,6 +15,12 @@
         ></v-text-field>
       </v-flex>
     </template>
+    <template v-if="!showSavedProducts">
+      <v-btn flat color="success" @click="showSavedProducts = !showSavedProducts">Saved Products</v-btn> 
+    </template>
+    <template v-if="showSavedProducts">
+      <v-btn flat color="error" @click="showSavedProducts = !showSavedProducts">Close</v-btn> 
+    </template>
 
     <template v-if="isScanning">
       <v-btn color="error" @click="isScanning = !isScanning">Stop Scanning</v-btn>
@@ -59,26 +65,32 @@
       </template>
       <div v-else >
 
-        <v-jumbotron>
-          <v-container fill-height>
-            <v-layout align-center>
-              <v-flex>
-                <h3 class="display-2">Track your Food & Drinks</h3>
-                <span class="subheading">
-                  Check out the repository on <a href="https://github.com/devilsdev/barcodefoodinfo">GitHub</a>
-                </span>
-                <v-divider class="my-3"></v-divider>
-                <div class="title mb-3">
-                  With BarcodeFoodInfo you can get information about any* food/drink that has a barcode on it.<br/><br/>
-                  1. Start by clicking on the 'SCAN' Button <br/>
-                  2. Scan your Barcode <br/>
-                  3. The App shows you information about the scanned product
-                </div>
-                <v-btn @click="checkForCamera" color="info">Scan</v-btn>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-jumbotron>
+        <template v-if="showSavedProducts">
+          <savedproductlist></savedproductlist>
+        </template>
+
+        <template v-else>
+          <v-jumbotron>
+            <v-container fill-height>
+              <v-layout align-center>
+                <v-flex>
+                  <h3 class="display-2">Track your Food & Drinks</h3>
+                  <span class="subheading">
+                    Check out the repository on <a href="https://github.com/devilsdev/barcodefoodinfo">GitHub</a>
+                  </span>
+                  <v-divider class="my-3"></v-divider>
+                  <div class="title mb-3">
+                    With BarcodeFoodInfo you can get information about any* food/drink that has a barcode on it.<br/><br/>
+                    1. Start by clicking on the 'SCAN' Button <br/>
+                    2. Scan your Barcode <br/>
+                    3. The App shows you information about the scanned product
+                  </div>
+                  <v-btn @click="checkForCamera" color="info">Scan</v-btn>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-jumbotron>
+        </template>
 
       </div>
     </div> 
@@ -92,6 +104,7 @@
 <script>
 import scanner from './components/Scanner.vue'
 import product from './components/ProductInfo.vue'
+import savedproductlist from './components/SavedProductList.vue'
 import axios from 'axios'
 export default {
   name: 'app',
@@ -106,12 +119,14 @@ export default {
       debugMode: false,
       alterNativeInput: '',
       debugActivated: false,
-      debugDeactivated: false
+      debugDeactivated: false,
+      showSavedProducts: false
     }
   },
   components: {
     scanner,
-    product
+    product,
+    savedproductlist
   },
   methods: {
     checkForCamera () {
@@ -181,6 +196,9 @@ export default {
         this.debugActivated = true
         setTimeout(() => this.debugActivated = false, 3000)
       }
+    },
+    showSavedProducts() {
+
     }
   }
 }
